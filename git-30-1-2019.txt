@@ -1,0 +1,217 @@
+git squash
+===========
+Merging of multiple commits is called squash.When the developer makes any changes to the code he generally commits it.when we upload this into the remote github all the commits are uploaded.To reduce the numbe rof commits that are uploaded and make it look like a small commit history we can use git squash
+
+Note: The first commit is called as initial commit and this cannot be squashed
+
+git rebase -i HEAD~4
+
+Note: 4 represents the top 4 commits that we want to work on
+
+Go into insert mode by pressing i
+and whichever commits that we want to merge remove the "pick" word and replace it with "squash"
+
+Save and quit     Esc :wq   Enter
+
+Check the commit history
+git log --oneline
+
+git log
+
+
+Git rebase can also used to rearrange the commit history
+git rebase -i HEAD~4
+Go into insert mode by pressing i
+Rearrange the commit order in whichever way we want
+Save and quit ESC :wq Enter
+
+Check the commit history
+git log --oneline
+
+Git Cherry Pick
+====================
+Both git merge and rebase will add all the commits on the branch to the master branch.If the developer feels that there are only few commits where 
+genuine code is present anf these commits have to be added tom the master branch we can use cherry-pick
+
+1 Create few commits on master
+  touch f1
+  git add .
+  git commit -m "a"
+  touch f2
+  git add .
+  git commit -m "b"
+
+2 Check the commit history of master
+  git log --oneline
+
+3 Create a new branch "test" and some commits on it
+  git checkout -b test
+  touch f3
+  git add .
+  git commit -m "c"
+  touch f4
+  git add .
+  git commit -m "d"
+  touch f5
+  git add .
+  git commit -m "e"
+
+4 Identify the commits that we want to add to master
+  git log --oneline
+
+5 Move to master and cherry pick
+  git checkout master
+  git cherry-pick commitid1  commitid2
+
+6 Check the commit history of master
+  git log --oneline
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

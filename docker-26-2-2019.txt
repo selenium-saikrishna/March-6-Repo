@@ -1,0 +1,239 @@
+
+
+1 To drain a node from the docker swarm
+  docker node update --avalability drain Worker1
+
+2 To make this node rejoin the swarm
+  docker node update --avalability active Worker1
+
+3 If worker1 wants to leave the swarm
+  Go to Worker1 machine
+  docker swarm leave
+
+4 If manager wants to leave the swarm
+  docker swarm leave --force
+
+
+Handling failover scenarios
+--------------------------------
+Start nginx as a service in docker swarm with 5 replicas
+Delete one replicas and check if all 5 are still active
+Drain a Worker1 from the swarm and see  if all the replicas of Worker1 have moved to worker2 and manager,Make Worker1 rejoin swarm
+Make worker2 leave the swarm and see if All the replicas on Worker2 have moved to worker1
+
+1 Start nginx as a service with 5 replcias
+  docker service create --name webserver -p 9090:80 
+                                        --replicas 5 nginx
+
+2 To see the container id of the replcias running on manager
+  docker container ls
+ 
+3 To delete on relpica
+  docker rm -f container_id
+
+4 Check if 5 replcias are still running
+  docker service ps webserver
+
+5 Make Worker1 drained from the swarm
+  docker node update --availability drain Worker1
+
+6 Check if 5 replicas are still running on Manager and Worker2
+  docker service ps webserver
+
+7 Rejoin Worker1 in swarm
+  docker node update --availability active Worker1
+
+8 Make worker2 leave the swarm
+  Open terminal in Worker2
+  docker swarm leave
+
+9 Check if 5 replicas are still running on Manager and Worker1
+  docker service ps webserver
+
+
+==============================================================
+Create 2 overlay networks intelliq1 and intelliq2
+Create tomcat as a service in swarm on intelliq1 network
+Create httpd as a service and once it is in running condition update the network to intelliq2
+
+1 Create 2 overlay networks intelliq1 and intelliq2
+  docker network create --driver overlay intelliq1
+  docker network create --driver overlay intelliq2
+
+2 Start tomcat as a service on intelliq1 network
+  docker service create --name webserver -p 6060:8080 
+                                  --network intelliq1  tomcat
+
+3 To check if webserver service is running on intelliq1 network
+  docker service inspect webserver --pretty
+
+4 Start httpd as a service in swarm 
+  docker service create --name appserver -p 7070:80 --replicas 3 httpd
+
+5 Now perform a rolling update of the network
+  docker service update --network-add intelliq2 appserver
+
+6 To check if appserver service is running on intelliq2 network
+  docker service inspect appserver --pretty
+
+=============================================================
+1 To generate th token-id for a node to join swarm as a worker
+  docker swarm join-token worker
+
+2 To generate the token-id for a node to join swarm as a maanger
+  docker swarm join-toke manager
+
+4 To promote Worker1 and make it as a manager
+  docker node promote Worker1
+
+5 To demote Worker1 and make it as a worker again
+  docker node demote Worker1
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  

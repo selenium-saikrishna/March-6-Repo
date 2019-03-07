@@ -1,0 +1,594 @@
+master has "kube-apiserver"
+
+slaves have "kubelet"
+
+
+kubectl
+
+kubeadmin
+
+Setup
+============
+1 Open https://labs.play-with-k8s.com/
+2 Login using github credentials or dockerhub credentails
+3 Click on New Instance
+  Create 3 such instances one for master and 2 for slaves
+4 Go to node1(master)
+5 To initilise the kubernetes master
+  kubeadm init --apiserver-advertise-address $(hostname -i)
+6 To create the cluster responsible for managing kubernetes
+  kubectl apply -n kube-system -f \
+    "https://cloud.weave.works/k8s/net?k8s-version=$(kubectl version | base64 |tr                                                                      -d '\n')"
+
+7 Copy the output of the 5th command and paste in Slave machines
+
+================================================
+1 To see the list of nodes in kubernetes cluster
+  kubectl get nodes
+
+2 To start nginx as a deployment in kubernetes cluster
+  kubectl run webserver  --image nginx
+
+3 To see the pods running
+  kubectl get pods
+  To see the pods along with the ips of the pods
+  kubectl get pods -o wide
+
+=----------------------------------------
+Start tomcat in kubernetes and perfrom port mapping
+kubectl run --image tomcat appserver --port=8080 --hostport=9090
+
+start mysql in kubernetes
+kubectl run --image mysql:5 mydb --env MYSQL_ROOT_PASSWORD=intelliq
+
+To open interactive terminal in the above db
+kubectl exec -it podname bash
+
+To see the logs
+kubectl logs -f podname
+
+To delete a deployment
+kebectl delete service_name
+
+
+
+
+Creating pods in kubernetes using ym files
+-----------------------------
+These yml files container  4 top level fields
+apiVersion
+kind
+metadata
+spec
+
+
+Kind        :    Version
+----------------------
+POD         :   v1
+Service     : v1
+ReplicaSet  : apps/v1
+Deployment  : apps/v1
+
+Pod definition file for depoloying httpd in kuberetes cluster
+
+vim pod-definition.yml
+apiVersion: v1
+
+kind: Pod
+
+metadata:
+ name: myapp-pod
+ labels:
+  app: myapp
+  type: front-end
+
+
+spec:
+ containers:
+  - name: httpd-container
+    image: httpd
+~
+~
+
+kubectl create -f pod-definition.yml
+
+To delete the service deployed using the above file
+kubectl delete -f pod-definition.yml
+
+
+vim pod-definition1.yml
+---
+apiVersion: v1
+
+kind: Pod
+
+metadata:
+ name: myapp-postgres
+ labels: 
+  tier: db-tier
+
+spec:
+ containers:
+  - name: postgres
+    image: postgres
+...
+
+--------------------------------------------------------
+
+vi pod-definition.yml
+---
+apiVersion: v1
+
+kind: Pod
+
+metadata:
+ name: myapp-mysql
+ labels:
+  dbname: mydb
+
+spec:
+ containers:
+  - name: mydb
+    image: mysql:5
+    env:
+     - name: MYSQL_ROOT_PASSWORD
+       value: intelliq
+...
+
+vim pod-definition.yml
+---
+apiVersion: v1
+kind: Pod
+
+metadata:
+ name: app-jenkins
+ labels:
+  ci: cd
+
+spec:
+ containers:
+  - name: myjenkins
+    image: jenkins
+    ports:
+     - containerPort: 8080
+       hostPort: 5050
+...
+
+
+vi rc-definition.yml
+---
+apiVersion: v1
+kind: ReplicationController
+
+metadata:
+ name: my-rc-tomcat
+spec:
+ replicas: 3
+ template:
+  metadata:
+   name: app-tomcat
+   labels:
+    app: tomcat
+  spec:
+    containers:
+     - name: mytomcat
+       image: tomcat
+       ports:
+        - containerPort: 8080
+          hostPort: 7070 
+
+---
+
+
+      
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+   
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

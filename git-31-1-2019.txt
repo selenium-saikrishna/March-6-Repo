@@ -1,0 +1,462 @@
+
+Create few dir
+mkdir -p dir1/dir2/dir3
+ansible all -m copy -a 'src=dir1  dest=/home/ubuntu'
+
+Copy module can also be used to change the ownership,group ownership and permissions of the files and folders that are copied to managed nodes
+ansible all -m copy -a 'src=file1 dest=/tmp owner=root group=root
+                                                 mode=765' -b
+
+Note:  -b represents "become" It is used in ansible for giving higher previlages to execute a command on the managed nodes.
+
+Copy module can also be used to send content into a file
+ansible all -m copy -a 'dest=/tmp/file content="Welcome to IntelliQ\n"'  -b
+
+Fetch Module
+===============
+Ansible command to copy the /etc/passwd file from all managed nodes to the controller
+ansible all -m fetch -a 'src=/etc/passwd dest=/tmp'
+
+
+apt Module
+=================
+ansible all -m apt -a 'name=git state=present' -b
+
+state=present represents installation
+state=absent is used for uninstallation
+state=latest is used for upgrading the current package
+
+Ansible command to install apache2 after upgrading the apt repository
+ansible all -m apt -a 'name=apache2 state=present update_cache=yes'  -b
+
+User Module
+===============
+This is used for creating user accounts on the managed nodes
+Command to create a user and assign a password
+ansible all -m user -a 'name=Anu password=intelliq' -b
+
+
+ansible all -m user -a 'name=Sai password=intelliq comment="A regular user"                            uid=2345 home=/home/ubuntu/Sai shell=/bin/bash' -b
+
+
+Service Module
+==================
+ansible all -m service -a 'name=apache2 state=restarted' -b
+
+state=started is for starting a service
+state=stopped is for stopping a service
+state=restarted is for restarting a service
+
+Git Module
+===============
+1 Install git on all managed nodes
+  ansible all -m apt -a 'name=git state=present' -b
+
+2 Clone a remote git repository 
+  ansible all -m git -a 'repo=https://github.com/selenium-saikrishna/maven.git
+                                                  dest=/home/ubuntu/mygit' -b
+
+
+File Module
+=============
+ansible command to create a file on all the managed nodes
+ansible all -m file -a 'name=/tmp/file1 state=touch'
+
+state=touch is used for creating files
+state=directory is used for creating directories
+state=absent is for deleting files/directories
+
+File module can also be used to change the ownership groupowner ship and permissions on the file
+ansible all -m file -a 'name=dir1 state=directory owner=Anu group=Sai                                                               mode=700' -b
+
+
+Git Stash
+==============
+This is a buffer area of git where git can store all the files which currently should become inaccessable by git.This is generally useful when the developer wants to leave some unfinished work and he wants to work on a new functionality and git should temporarly not access the previous unfinished files.Once the files are pushed into the stash area git cannot acces them until they are unstashed
+
+1 To stash the stagged files
+  git stash
+ 
+2 To stash the untracked files and stagged files
+  git stash -u
+
+3 To stash the .gitignore ,untracked files and stagged files
+  git stash -a
+
+4 To see the list of stashes
+  git stash list
+
+5 To bring the latest stash into unstaash section
+  git stash pop
+Note: The latest stash will come with stash@{0} and older stashes will come
+with stash@{1} etc
+  To unstash an older stash
+  git stash pop stash@{number}
+
+
+Scenario
+=============
+1 Create some files and stage them
+  touch f1 f2
+  git add .
+
+2 Check the status of git
+  git status
+  It should show f1 and f2 in stagging area
+
+3 Stash them
+  git stash
+
+4 Check the status of git
+  git status
+  It should show working tree is clean Nothing to commit
+
+5 See the list of stashes that we have done
+  git stash list
+
+6 Unstash it
+  git stash pop
+
+==============================================================
+Create few file send some into stagging aree and let the other remain in untracked section.Stash everything
+1 touch f3 f4 f5 f6
+  git add f3 f4
+
+2 Check the status of git
+  f3 and f4 will be shown as stagged files
+  f5 and f6 will be shown as untracked files
+
+3 Stash everything
+  git stash -u
+
+4 Check the status of git
+  It should show working tree is clean Nothing to commit
+
+===========================================================================
+
+.gitignore is a special configuration file where we can store all the private files info .Any file whose name is given in .gitignore will no longer be accessable by git.But the .gitignore file itslef is accessable by git ie it will move into stagging area,local repository and remote repository.To hide .gitignore also we can use "git stash -a"
+
+1 Create some file
+  touch f7 f8
+
+2 Check the status of git
+  git status
+  It will show f7 and f8 ad untracked files
+
+2 Hide them by putting them in .gitignore
+  cat > .gitignore
+  f7
+  f8
+  Come out of cat command using ctrl+d
+
+3 Check the status of git
+  git status
+  it will only show .gitignore as an untracked file
+
+4 To make .gitignore also unaccessable
+  git stash -a
+
+5 Check the status of git
+  git status
+  It will display nothing to commit 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
